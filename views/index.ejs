@@ -1,0 +1,29 @@
+<% include header%>
+
+    <div class="col-sm-12">
+        <div class="features_items">
+            <!--features_items-->
+            <h2 class="title text-center">New Products</h2>
+            <% products.forEach(function(product){ %>
+                <div class="col-sm-4">
+                    <div class="product-image-wrapper">
+                        <div class="single-products">
+                            <div class="productinfo text-center">
+                                <img src="<%=product.image %>" alt="" />
+                                <h2>
+                                    <%= product.price %>
+                                </h2>
+                                <p>
+                                    <%= product.name %>
+                                </p>
+                                <a href="product/<%= product.slugPro %>" class="btn btn-default add-to-cart">
+                                    <i class="fa fa-shopping-cart"></i>Xem thêm</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <% })  %>
+        </div>
+        <!--features_items-->
+    </div>
+    <% include footer%>
