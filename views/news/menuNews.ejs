@@ -1,0 +1,40 @@
+<% include ../header %>
+	<% include ../menuLeft %>
+		<div class="col-sm-9">
+			<div class="blog-post-area">
+				<h2 class="title text-center">Tin tuc</h2>
+				<% news.forEach(function(news){ %>
+					<div class="single-blog-post">
+						<h3>
+							<%= news.name %>
+						</h3>
+						<div class="post-meta">
+							<ul>
+								<li>
+									<i class="fa fa-user"></i> Mac Doe</li>
+								<li>
+									<i class="fa fa-clock-o"></i> 1:33 pm</li>
+								<li>
+									<i class="fa fa-calendar"></i> DEC 5, 2013</li>
+							</ul>
+							<span>
+								<i class="fa fa-star"></i>
+								<i class="fa fa-star"></i>
+								<i class="fa fa-star"></i>
+								<i class="fa fa-star"></i>
+								<i class="fa fa-star-half-o"></i>
+							</span>
+						</div>
+						<a href="">
+							<img src="<%= news.image %>" alt="">
+						</a>
+						<p>
+							<%- news.description %>
+						</p>
+						<a class="btn btn-primary" href="/news/<%= news.slugNew %>">Read More</a>
+					</div>
+					<% })  %>
+			</div>
+		</div>
+
+		<% include ../footer %>

@@ -42,8 +42,9 @@ router.route("/proAdd")
                 let newPro = { menu: menuPro, name, slugPro, price, image, description };
                 Product.create(newPro)
                     .then(() => res.redirect("/"))
+                    .catch(e => res.redirect("back"))
             })
-            .catch(e => res.redirect("/proAdd"))
+            .catch(e => res.redirect("back"))
     });
 
 router.route("/product/:slugPro")
@@ -57,17 +58,33 @@ router.route("/product/:slugPro")
             .catch(e => console.log(e))
     });
 
+router.route("/menu/:slugMenu")
+    .get((req, res) => {
+        let slugMenu = req.params.slugMenu;
+        Menu.findOne({ slugMenu })
+            .then(menu => {
+                // console.log(menu.id);
+                Product.find({ 'menu.id': menu.id })
+                    .then(products => {
+                        console.log(products);
+                        Menu.find()
+                            .then(menus => res.render("menuPro", { menu, menus, products }))
+                    })
+            })
+            .catch(e => console.log(e))
+    });
+
 router.route("/product/:id/edit")
-  .get((req, res) => {
-      let idPro = req.params.id;
-      Product.findById(idPro)
-      .then(product => {
-        Menu.find()
-        .then(menus => res.render("proEdit", { menus, product }))
-      })
-      .catch(e => console.log(e))
-  })
-    
+    .get((req, res) => {
+        let idPro = req.params.id;
+        Product.findById(idPro)
+            .then(product => {
+                Menu.find()
+                    .then(menus => res.render("proEdit", { menus, product }))
+            })
+            .catch(e => console.log(e))
+    })
+
 router.route("/product/:id")
     .put((req, res) => {
         let { name, price, image } = req.body;
@@ -80,21 +97,17 @@ router.route("/product/:id")
                     menu: menuResult.slugMenu
                 };
                 let idPro = req.params.id;
-                let slugPro = slug(name, { lower: true });
-                let newPro = { menu: menuPro, name, slugPro, price, image, description };
+                let newPro = { menu: menuPro, name, price, image, description };
                 Product.findByIdAndUpdate(idPro, newPro)
                     .then((product) => res.redirect("/product/" + product.slugPro))
             })
             .catch(e => res.redirect("/"))
     })
-    .delete(function (req, res) {
-        Campground.findByIdAndRemove(req.params.id, function (err) {
-            if (err) {
-                console.log(err);
-            } else {
-                res.redirect("/campgrounds");
-            }
-        });
+    .delete((req, res) => {
+        let idPro = req.params.id;
+        Product.findByIdAndRemove(idPro)
+            .then(() => res.redirect("/"))
+            .catch(e => res.redirect("/"))
     });
 
 module.exports = router;

@@ -1,0 +1,39 @@
+<% include ../header %>
+    <% include ../menuLeft %>
+        <div class="col-sm-9">
+            <div class="blog-post-area">
+                <h2 class="title text-center">Tin tuc</h2>
+                <div class="single-blog-post">
+                    <h3><%= news.name %></h3>
+                    <div class="post-meta">
+                        <ul>
+                                <i class="fa fa-clock-o"></i><%= news.date.toLocaleTimeString() %></li>
+                            <li>
+                                <i class="fa fa-calendar"></i><%= news.date.toDateString() %></li>
+                        </ul>
+                        <span>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star-half-o"></i>
+                        </span>
+                    </div>
+                    <a href="">
+                        <img src="<%= news.image %>" alt="">
+                    </a>
+                    <p>
+                            <%- news.description %>
+                    </p>
+                    <a href="/news/<%= news._id %>/edit">
+                        <button type="button" class="btn btn-default pull-right">Edit</button>
+                    </a>
+                    <form action="/news/<%= news._id %>?_method=DELETE" method="POST">
+                        <button type="submit" class="btn btn-default pull-right">
+                            Delete
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <!--/blog-post-area-->
+            <% include ../footer %>
