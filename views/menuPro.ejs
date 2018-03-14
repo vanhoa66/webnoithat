@@ -1,6 +1,6 @@
 <% include header%>
 	<% include menuLeft%>
-	
+
 		<div class="col-sm-9 padding-right">
 			<div class="features_items">
 				<!--features_items-->
@@ -27,5 +27,37 @@
 					</div>
 					<% })  %>
 			</div>
+			<!--features_items-->
+
+			<!--pagination-->
+			<% if(totalPage > 1){ %>
+				<ul class="pagination">
+					<% if(page > 1){ %>
+						<li>
+							<a href="/menu/<%= menu.slugMenu %>/<%= page - 1 %>">&laquo;</a>
+						</li>
+						<% } %>
+							<%  for( let i = 1; i <= totalPage; i++) {%>
+								<%if(page === i ){  %>
+									<li class="active">
+										<a href="/menu/<%= menu.slugMenu %>/
+						<%= i %>">
+											<%= i %>
+										</a>
+									</li>
+									<% } else { %>
+										<li>
+											<a href="/menu/<%= menu.slugMenu %>/<%= i %>">
+												<%= i %>
+											</a>
+										</li>
+										<% }} %>
+											<% if(page < totalPage){ %>
+												<li>
+													<a href="/menu/<%= menu.slugMenu %>/<%= page + 1 %>">&raquo;</a>
+												</li>
+												<% } %>
+				</ul>
+				<% } %>
 		</div>
 		<% include footer%>
