@@ -4,11 +4,14 @@ const express = require("express"),
     New = require("../models/newModel"),
     slug = require("slug");
 
+let menus = [];
+Menu.find()
+    .then(arrMenu => menus = arrMenu)
+    .catch(e => console.log(e))
+
 router.route("/newAdd")
     .get((req, res) => {
-        Menu.find()
-            .then(menus => res.render("./news/newsAdd", { menus }))
-            .catch(e => console.log(e))
+        res.render("./news/newsAdd", { menus })
     })
     .post((req, res) => {
         let { name, image } = req.body;
@@ -23,11 +26,7 @@ router.route("/newAdd")
 router.route("/news")
     .get((req, res) => {
         New.find()
-            .then(news => {
-                Menu.find()
-                    .then(menus => res.render("./news/menuNews", { menus, news }))
-                    .catch(e => console.log(e))
-            })
+            .then(news => res.render("./news/menuNews", { menus, news }))
             .catch(e => console.log(e))
     });
 
@@ -35,10 +34,7 @@ router.route("/news/:slugNew")
     .get((req, res) => {
         let slugNew = req.params.slugNew;
         New.findOne({ slugNew })
-            .then(news => {
-                Menu.find()
-                    .then(menus => res.render("./news/newsDetail", { menus, news }))
-            })
+            .then(news => res.render("./news/newsDetail", { menus, news }))
             .catch(e => console.log(e))
     });
 
@@ -47,10 +43,7 @@ router.route("/news/:id/edit")
     .get((req, res) => {
         let idNews = req.params.id;
         New.findById(idNews)
-            .then(news => {
-                Menu.find()
-                    .then(menus => res.render("./news/newsEdit", { menus, news }))
-            })
+            .then(news => res.render("./news/newsEdit", { menus, news }))
             .catch(e => console.log(e))
     })
 

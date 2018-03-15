@@ -4,12 +4,22 @@ const express = require("express"),
     Product = require("../models/productModel"),
     slug = require("slug");
 
+let menus = [];
+Menu.find()
+    .then(arrMenu => menus = arrMenu )
+    .catch(e => console.log(e))
+
 router.route("/")
-    .get((req, res) => {
+    .get(async (req, res) => {
+        // let r = await foo();
+        // console.log(r);
+        // menus.forEach(e => {
+        //     Product.find({'menu.id': e.id}).then(r => {pro.push(r); console.log(pro);});
+        // }) 
+
         Product.find()
             .then(products => {
-                Menu.find()
-                    .then(menus => res.render("index", { menus, products }))
+                res.render("index", { menus, products })
             })
             .catch(e => console.log(e))
     })
@@ -24,9 +34,7 @@ router.route("/")
 
 router.route("/proAdd")
     .get((req, res) => {
-        Menu.find()
-            .then(menus => res.render("proAdd", { menus }))
-            .catch(e => console.log(e))
+        res.render("proAdd", { menus })
     })
     .post((req, res) => {
         let { name, price, image } = req.body;
@@ -52,8 +60,7 @@ router.route("/product/:slugPro")
         let slugPro = req.params.slugPro;
         Product.findOne({ slugPro })
             .then(product => {
-                Menu.find()
-                    .then(menus => res.render("proDetail", { menus, product }))
+                res.render("proDetail", { menus, product })
             })
             .catch(e => console.log(e))
     });
@@ -61,18 +68,16 @@ router.route("/product/:slugPro")
 router.route("/menu/:slugMenu")
     .get((req, res) => {
         let slugMenu = req.params.slugMenu;
+        let queryPage = req.params.page;
         let page = 1;
         Menu.findOne({ slugMenu })
             .then(menu => {
-                Menu.find()
-                    .then(menus => {
-                        Product.find({ 'menu.id': menu.id }).count()
-                            .then(totalPro => {
-                                let totalPage = Math.ceil(totalPro / 3);
-                                Product.find({ 'menu.id': menu.id }).skip((page - 1) * 3).limit(3)
-                                    .then(products => {
-                                        res.render("menuPro", { menu, menus, products, totalPage, page })
-                                    })
+                Product.find({ 'menu.id': menu.id }).count()
+                    .then(totalPro => {
+                        let totalPage = Math.ceil(totalPro / 3);
+                        Product.find({ 'menu.id': menu.id }).skip((page - 1) * 3).limit(3)
+                            .then(products => {
+                                res.render("menuPro", { menu, menus, products, totalPage, page })
                             })
                     })
             })
@@ -86,15 +91,12 @@ router.route("/menu/:slugMenu/:page")
         page = page ? page : 1;
         Menu.findOne({ slugMenu })
             .then(menu => {
-                Menu.find()
-                    .then(menus => {
-                        Product.find({ 'menu.id': menu.id }).count()
-                            .then(totalPro => {
-                                let totalPage = Math.ceil(totalPro / 3);
-                                Product.find({ 'menu.id': menu.id }).skip((page - 1) * 3).limit(3)
-                                    .then(products => {
-                                        res.render("menuPro", { menu, menus, products, totalPage, page })
-                                    })
+                Product.find({ 'menu.id': menu.id }).count()
+                    .then(totalPro => {
+                        let totalPage = Math.ceil(totalPro / 3);
+                        Product.find({ 'menu.id': menu.id }).skip((page - 1) * 3).limit(3)
+                            .then(products => {
+                                res.render("menuPro", { menu, menus, products, totalPage, page })
                             })
                     })
             })
@@ -105,10 +107,7 @@ router.route("/product/:id/edit")
     .get((req, res) => {
         let idPro = req.params.id;
         Product.findById(idPro)
-            .then(product => {
-                Menu.find()
-                    .then(menus => res.render("proEdit", { menus, product }))
-            })
+            .then(product => res.render("proEdit", { menus, product }))
             .catch(e => console.log(e))
     })
 
