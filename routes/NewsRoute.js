@@ -2,15 +2,14 @@ const express = require("express"),
     router = express.Router(),
     Menu = require("../models/menuModel"),
     New = require("../models/newModel"),
+    getMenu = require("./menuRoute"),
     slug = require("slug");
 
-let menus = [];
-Menu.find()
-    .then(arrMenu => menus = arrMenu)
-    .catch(e => console.log(e))
+
 
 router.route("/newAdd")
-    .get((req, res) => {
+    .get(async (req, res) => {
+        let menus = await getMenu();
         res.render("./news/newsAdd", { menus })
     })
     .post((req, res) => {
@@ -25,13 +24,19 @@ router.route("/newAdd")
 
 router.route("/news")
     .get((req, res) => {
-        New.find()
-            .then(news => res.render("./news/menuNews", { menus, news }))
-            .catch(e => console.log(e))
+        Promise.all([Menu.find().then(), New.find().then()])
+            .then(data => {
+                res.render("./news/menuNews", { menus: data[0], news: data[1] });
+            });
+        // let menus = await getMenu();
+        // New.find()
+        //     .then(news => res.render("./news/menuNews", { menus, news }))
+        //     .catch(e => console.log(e))
     });
 
 router.route("/news/:slugNew")
-    .get((req, res) => {
+    .get(async (req, res) => {
+        let menus = await getMenu();
         let slugNew = req.params.slugNew;
         New.findOne({ slugNew })
             .then(news => res.render("./news/newsDetail", { menus, news }))
@@ -40,7 +45,8 @@ router.route("/news/:slugNew")
 
 
 router.route("/news/:id/edit")
-    .get((req, res) => {
+    .get(async (req, res) => {
+        let menus = await getMenu();
         let idNews = req.params.id;
         New.findById(idNews)
             .then(news => res.render("./news/newsEdit", { menus, news }))

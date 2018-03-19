@@ -14,7 +14,7 @@
     <link href="/static/css/animate.css" rel="stylesheet">
     <link href="/static/css/main.css" rel="stylesheet">
     <link href="/static/css/responsive.css" rel="stylesheet">
-    <script src="https://cdn.ckeditor.com/4.9.0/standard/ckeditor.js"></script>
+    <script type="text/javascript" src="./static/ckeditor/ckeditor.js"></script>
 </head>
 <!--/head-->
 
@@ -126,7 +126,9 @@
                                 </li>
                                 <% menus.forEach(function(menu){ %>
                                     <li>
-                                        <a href="/menu/<%= menu.slugMenu %>"><%= menu.name %></a>
+                                        <a href="/menu/<%= menu.slugMenu %>">
+                                            <%= menu.name %>
+                                        </a>
                                     </li>
                                     <% })  %>
                             </ul>

@@ -1,27 +1,27 @@
+
 const express = require("express"),
     router = express.Router(),
     Menu = require("../models/menuModel"),
     Product = require("../models/productModel"),
+    getMenu = require("./menuRoute"),
     slug = require("slug");
-
-let menus = [];
-Menu.find()
-    .then(arrMenu => menus = arrMenu )
-    .catch(e => console.log(e))
 
 router.route("/")
     .get(async (req, res) => {
-        // let r = await foo();
-        // console.log(r);
-        // menus.forEach(e => {
-        //     Product.find({'menu.id': e.id}).then(r => {pro.push(r); console.log(pro);});
-        // }) 
+        // Promise.all([Menu.find().then(), Product.find().then()])
+        //     .then(data => {
 
-        Product.find()
-            .then(products => {
-                res.render("index", { menus, products })
-            })
-            .catch(e => console.log(e))
+        let menus, products = [];
+        try {
+            menus = await Menu.find().then();
+            for (let i = 0; i < menus.length; i++) {
+                let p = await Product.find({ 'menu.id': menus[i].id }).limit(4).then();
+                products = products.concat(p);
+            }
+        } catch (e) {
+            console.log(e)
+        }
+        res.render("index", { menus, products })
     })
     .post((req, res) => {
         let { name } = req.body;
@@ -33,7 +33,8 @@ router.route("/")
     });
 
 router.route("/proAdd")
-    .get((req, res) => {
+    .get(async (req, res) => {
+        let menus = await getMenu();
         res.render("proAdd", { menus })
     })
     .post((req, res) => {
@@ -56,7 +57,8 @@ router.route("/proAdd")
     });
 
 router.route("/product/:slugPro")
-    .get((req, res) => {
+    .get(async (req, res) => {
+        let menus = await getMenu();
         let slugPro = req.params.slugPro;
         Product.findOne({ slugPro })
             .then(product => {
@@ -66,7 +68,8 @@ router.route("/product/:slugPro")
     });
 
 router.route("/menu/:slugMenu")
-    .get((req, res) => {
+    .get(async (req, res) => {
+        let menus = await getMenu();
         let slugMenu = req.params.slugMenu;
         let queryPage = req.params.page;
         let page = 1;
@@ -84,7 +87,8 @@ router.route("/menu/:slugMenu")
     });
 
 router.route("/menu/:slugMenu/:page")
-    .get((req, res) => {
+    .get(async (req, res) => {
+        let menus = await getMenu();
         let slugMenu = req.params.slugMenu;
         let queryPage = req.params.page;
         let page = parseInt(queryPage, 10);
@@ -104,7 +108,8 @@ router.route("/menu/:slugMenu/:page")
     });
 
 router.route("/product/:id/edit")
-    .get((req, res) => {
+    .get(async (req, res) => {
+        let menus = await getMenu();
         let idPro = req.params.id;
         Product.findById(idPro)
             .then(product => res.render("proEdit", { menus, product }))

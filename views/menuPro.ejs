@@ -1,63 +1,70 @@
 <% include header%>
-	<% include menuLeft%>
 
-		<div class="col-sm-9 padding-right">
-			<div class="features_items">
-				<!--features_items-->
-				<h2 class="title text-center">
-					<%= menu.name %>
-				</h2>
-				<% products.forEach(function(product){ %>
-					<div class="col-sm-4">
-						<div class="product-image-wrapper">
-							<div class="single-products">
-								<div class="productinfo text-center">
-									<img src="<%=product.image %>" alt="" />
-									<h2>
-										<%= product.price %>
-									</h2>
-									<p>
-										<%= product.name %>
-									</p>
-									<a href="product/<%= product.slugPro %>" class="btn btn-default add-to-cart">
-										<i class="fa fa-shopping-cart"></i>Xem thêm</a>
+	<section>
+		<div class="container">
+			<div class="row">
+
+				<% include menuLeft%>
+
+					<div class="col-sm-9 padding-right">
+						<div class="features_items">
+							<!--features_items-->
+							<h2 class="title text-center">
+								<%= menu.name %>
+							</h2>
+							<% products.forEach(function(product){ %>
+								<div class="col-sm-4">
+									<div class="product-image-wrapper">
+										<div class="single-products">
+											<div class="productinfo text-center">
+												<img src="<%=product.image %>" alt="" />
+												<h2>
+													<%= product.price %>
+												</h2>
+												<p>
+													<%= product.name %>
+												</p>
+												<a href="product/<%= product.slugPro %>" class="btn btn-default add-to-cart">
+													<i class="fa fa-shopping-cart"></i>Xem thêm</a>
+											</div>
+										</div>
+									</div>
 								</div>
-							</div>
+								<% })  %>
 						</div>
-					</div>
-					<% })  %>
-			</div>
-			<!--features_items-->
+						<!--features_items-->
 
-			<!--pagination-->
-			<% if(totalPage > 1){ %>
-				<ul class="pagination">
-					<% if(page > 1){ %>
-						<li>
-							<a href="/menu/<%= menu.slugMenu %>/<%= page - 1 %>">&laquo;</a>
-						</li>
-						<% } %>
-							<%  for( let i = 1; i <= totalPage; i++) {%>
-								<%if(page === i ){  %>
-									<li class="active">
-										<a href="/menu/<%= menu.slugMenu %>/
-						<%= i %>">
-											<%= i %>
-										</a>
+						<!--pagination-->
+						<% if(totalPage > 1){ %>
+							<ul class="pagination">
+								<% if(page > 1){ %>
+									<li>
+										<a href="/menu/<%= menu.slugMenu %>/<%= page - 1 %>">&laquo;</a>
 									</li>
-									<% } else { %>
-										<li>
-											<a href="/menu/<%= menu.slugMenu %>/<%= i %>">
-												<%= i %>
-											</a>
-										</li>
-										<% }} %>
-											<% if(page < totalPage){ %>
-												<li>
-													<a href="/menu/<%= menu.slugMenu %>/<%= page + 1 %>">&raquo;</a>
+									<% } %>
+										<%  for( let i = 1; i <= totalPage; i++) {%>
+											<%if(page === i ){  %>
+												<li class="active">
+													<a href="/menu/<%= menu.slugMenu %>/<%= i %>">
+														<%= i %>
+													</a>
 												</li>
-												<% } %>
-				</ul>
-				<% } %>
+												<% } else { %>
+													<li>
+														<a href="/menu/<%= menu.slugMenu %>/<%= i %>">
+															<%= i %>
+														</a>
+													</li>
+													<% }} %>
+														<% if(page < totalPage){ %>
+															<li>
+																<a href="/menu/<%= menu.slugMenu %>/<%= page + 1 %>">&raquo;</a>
+															</li>
+															<% } %>
+							</ul>
+							<% } %>
+					</div>
+			</div>
 		</div>
-		<% include footer%>
+	</section>
+	<% include footer%>
